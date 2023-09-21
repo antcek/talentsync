@@ -29,7 +29,7 @@ function AuthShowcase() {
 
   return (
     <div className="">
-      <p className="text-center text-2xl text-white">
+      <p className="">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
