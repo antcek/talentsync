@@ -1,10 +1,16 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-
+import Layout from "~/application/widgets/layout";
+import { NextPageWithLayout } from "~/application/app/_app";
 import { api } from "~/utils/api";
+import { ReactElement } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetStaticPropsContext } from "next";
 
-export default function Home() {
+const PAGE_NAME = "main";
+
+const Page: NextPageWithLayout = () => {
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   return (
@@ -17,7 +23,11 @@ export default function Home() {
       <main className="bg-white"></main>
     </>
   );
-}
+};
+
+Page.getLayout = function getLayout(page: ReactElement) {
+  return <Layout page={`${PAGE_NAME}`}>{page}</Layout>;
+};
 
 function AuthShowcase() {
   const { data: sessionData } = useSession();
@@ -41,3 +51,15 @@ function AuthShowcase() {
     </div>
   );
 }
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  locale = locale || "ru";
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", PAGE_NAME])),
+    },
+  };
+}
+
+export default Page;
