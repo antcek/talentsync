@@ -3,7 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { appWithTranslation } from "next-i18next";
 import { api } from "~/utils/api";
-import Layout from "../widgets/layout";
+import Layout from "../application/widgets/layout";
 import "~/styles/globals.css";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
@@ -21,13 +21,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout ?? ((page) => page);
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
-    <Layout>
-      <SessionProvider session={session}>
-        {getLayout(<Component {...pageProps} />)}
-      </SessionProvider>
-    </Layout>
+    <SessionProvider session={session}>
+     {getLayout(<Component {...pageProps} />)}
+    </SessionProvider>
   );
 };
 
